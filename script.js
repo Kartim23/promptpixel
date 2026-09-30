@@ -700,9 +700,13 @@ const prompts = [
     "tags": "avatar, minimal, profile"
   }
 ];
-const grid=document.getElementById('grid'), search=document.getElementById('search'), cats=document.getElementById('categories'), count=document.getElementById('resultCount');
-const generator=document.getElementById('generator'), genPrompt=document.getElementById('genPrompt'), genImage=document.getElementById('genImage'), genResult=document.getElementById('genResult'), genStatus=document.getElementById('genStatus');
-let active='All', visible=12;
+
+const grid=document.getElementById('grid');
+const search=document.getElementById('search');
+const cats=document.getElementById('categories');
+const count=document.getElementById('resultCount');
+let active='All';
+let visible=12;
 const categories=['All',...new Set(prompts.map(p=>p.category))];
 const imageMap={
   'Viral / Trending':'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=900&q=85',
@@ -716,18 +720,35 @@ const imageMap={
   'Anime / Artistic':'https://images.unsplash.com/photo-1578632767115-351597cf2477?auto=format&fit=crop&w=900&q=85',
   'Professional / Profile':'https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&w=900&q=85'
 };
-function tagsOf(p){return Array.isArray(p.tags)?p.tags:String(p.tags||'').split(',').map(x=>x.trim()).filter(Boolean)}
+function tagsOf(p){return String(p.tags||'').split(',').map(x=>x.trim()).filter(Boolean)}
 function imgOf(p){return imageMap[p.category]||imageMap['Portrait & Face']}
-categories.forEach(c=>{const b=document.createElement('button');b.className='cat'+(c==='All'?' active':'');b.textContent=c;b.onclick=()=>{active=c;visible=12;document.querySelectorAll('.cat').forEach(x=>x.classList.remove('active'));b.classList.add('active');render()};cats.appendChild(b)});
-function filtered(){const q=search.value.toLowerCase().trim();return prompts.filter(p=>(active==='All'||p.category===active)&&(!q||(p.title+' '+p.description+' '+p.prompt+' '+tagsOf(p).join(' ')).toLowerCase().includes(q)))}
-function render(){const list=filtered();count.textContent=`${list.length} prompt${list.length===1?'':'s'}`;const shown=list.slice(0,visible);grid.innerHTML=shown.length?shown.map((p,i)=>`<article class="card"><div class="card-image"><img src="${imgOf(p)}" alt="${escapeHtml(p.title)}" loading="lazy"><span>${escapeHtml(p.category)}</span></div><div class="card-body"><h3>${escapeHtml(p.title)}</h3><p class="desc">${escapeHtml(p.description)}</p><div class="prompt">${escapeHtml(p.prompt)}</div><div class="tags">${tagsOf(p).map(t=>`<span class="tag">#${escapeHtml(t)}</span>`).join('')}</div><div class="actions"><button class="copy" data-index="${list.indexOf(p)}">📋 Copy</button><button class="generate" data-index="${list.indexOf(p)}">✨ Generate</button></div></div></article>`).join(''):`<div class="empty">No prompts found. Try another search.</div>`;if(list.length>visible){const b=document.createElement('button');b.className='loadmore';b.textContent='Load more prompts';b.onclick=()=>{visible+=12;render()};grid.appendChild(b)}
- document.querySelectorAll('.copy').forEach(btn=>btn.onclick=()=>{const p=list[Number(btn.dataset.index)];navigator.clipboard.writeText(p.prompt).then(()=>{btn.textContent='✓ Copied';btn.classList.add('done');setTimeout(()=>{btn.textContent='📋 Copy';btn.classList.remove('done')},1400)}).catch(()=>{btn.textContent='Copy failed'})});
- document.querySelectorAll('.generate').forEach(btn=>btn.onclick=()=>openGenerator(list[Number(btn.dataset.index)]));}
-function openGenerator(p){generator.classList.add('open');genPrompt.value=p.prompt;genImage.src=imgOf(p);genResult.classList.remove('show');genStatus.textContent='Ready — edit the prompt or generate a demo preview.';document.body.classList.add('modal-open')}
-function closeGenerator(){generator.classList.remove('open');document.body.classList.remove('modal-open')}
-document.getElementById('closeGen').onclick=closeGenerator;generator.addEventListener('click',e=>{if(e.target===generator)closeGenerator()});
-document.getElementById('genBtn').onclick=()=>{genStatus.textContent='Demo preview generated. Real AI generation needs an image-generation API connected to this site.';genResult.classList.add('show');genResult.src=genImage.src};
-document.getElementById('copyGen').onclick=()=>navigator.clipboard.writeText(genPrompt.value).then(()=>{genStatus.textContent='Prompt copied ✓'});
-document.getElementById('uploadImage').onchange=e=>{const f=e.target.files?.[0];if(!f)return;const r=new FileReader();r.onload=()=>{genImage.src=r.result;genResult.classList.remove('show');genStatus.textContent='Reference image loaded. Now tap Generate.'};r.readAsDataURL(f)};
-search.addEventListener('input',()=>{visible=12;render()});render();
 function escapeHtml(s){return String(s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]))}
+function filtered(){const q=search.value.toLowerCase().trim();return prompts.filter(p=>(active==='All'||p.category===active)&&(!q||(p.title+' '+p.description+' '+p.prompt+' '+tagsOf(p).join(' ')).toLowerCase().includes(q)))}
+function render(){
+  const list=filtered();
+  count.textContent=`${list.length} prompt${list.length===1?'':'s'}`;
+  const shown=list.slice(0,visible);
+  if(!shown.length){grid.innerHTML='<div class="empty">No prompts found. Try another search.</div>';return;}
+  grid.innerHTML=shown.map((p,i)=>`<article class="card">
+    <div class="card-image"><img src="${imgOf(p)}" alt="${escapeHtml(p.title)}" loading="lazy"><span>${escapeHtml(p.category)}</span></div>
+    <div class="card-body">
+      <h3>${escapeHtml(p.title)}</h3>
+      <p class="desc">${escapeHtml(p.description)}</p>
+      <div class="prompt">${escapeHtml(p.prompt)}</div>
+      <div class="tags">${tagsOf(p).map(t=>`<span class="tag">#${escapeHtml(t)}</span>`).join('')}</div>
+      <button class="copy" data-i="${i}">📋 Copy Prompt</button>
+    </div>
+  </article>`).join('');
+  if(list.length>visible){
+    const b=document.createElement('button'); b.className='loadmore'; b.textContent=`Load more prompts (${list.length-visible} remaining)`; b.onclick=()=>{visible+=12;render();}; grid.appendChild(b);
+  }
+  grid.querySelectorAll('.copy').forEach(btn=>btn.addEventListener('click',()=>{
+    const p=shown[Number(btn.dataset.i)];
+    const done=()=>{btn.textContent='✓ Copied';btn.classList.add('done');setTimeout(()=>{btn.textContent='📋 Copy Prompt';btn.classList.remove('done')},1500)};
+    if(navigator.clipboard&&window.isSecureContext){navigator.clipboard.writeText(p.prompt).then(done).catch(()=>fallbackCopy(p.prompt,done));}else fallbackCopy(p.prompt,done);
+  }));
+}
+function fallbackCopy(text,done){const ta=document.createElement('textarea');ta.value=text;ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.focus();ta.select();try{document.execCommand('copy');done();}catch(e){}ta.remove();}
+categories.forEach(c=>{const b=document.createElement('button');b.className='cat'+(c==='All'?' active':'');b.textContent=c;b.onclick=()=>{active=c;visible=12;document.querySelectorAll('.cat').forEach(x=>x.classList.remove('active'));b.classList.add('active');render();};cats.appendChild(b);});
+search.addEventListener('input',()=>{visible=12;render();});
+render();

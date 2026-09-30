@@ -1,8 +1,33 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="PromptPixel — free AI photo prompts with examples and a simple generator preview."><title>PromptPixel — Free AI Photo Prompts</title><link rel="stylesheet" href="style.css"></head><body>
-<header class="topbar"><a class="brand" href="#"><span class="logo">P</span><span>Prompt<span class="accent">Pixel</span></span></a><div class="count">100 FREE PROMPTS</div></header>
-<main><section class="hero"><div class="pill">✨ 100% Free AI Prompts</div><h1>Create Better<br><span>AI Photos.</span></h1><p>See the example, copy the prompt, or open the generator and preview your idea.</p><a class="cta" href="#library">🔥 Explore Prompts</a></section>
-<section id="library" class="library"><div class="search-wrap"><input id="search" type="search" placeholder="Search prompts… e.g. cinematic, couple, rain" aria-label="Search prompts"></div><div id="categories" class="categories"></div>
-<div class="ad" aria-label="Advertisement"><script>atOptions={'key':'a5da74f1cb6973c746743ba4869db5aa','format':'iframe','height':50,'width':320,'params':{}};</script><script src="https://www.highrevenueformat.com/a5da74f1cb6973c746743ba4869db5aa/invoke.js"></script></div>
-<div class="results-head"><div><h2>Prompt Library</h2><p>Image + prompt + Generate</p></div><span id="resultCount"></span></div><div id="grid" class="grid"></div></section></main>
-<section id="generator" class="generator"><div class="generator-box"><button id="closeGen" class="close" aria-label="Close">×</button><div class="gen-head"><span>✨</span><div><h2>AI Image Generator</h2><p>Use the selected prompt as your starting point.</p></div></div><div class="gen-layout"><div class="gen-preview"><img id="genImage" src="" alt="Reference preview"><div class="upload"><label for="uploadImage">📤 Upload your photo</label><input id="uploadImage" type="file" accept="image/*"></div></div><div class="gen-controls"><label>Prompt</label><textarea id="genPrompt" rows="8"></textarea><div class="control-row"><div><label>Style</label><select><option>Photorealistic</option><option>Cinematic</option><option>Fashion</option><option>Anime</option><option>Editorial</option></select></div><div><label>Ratio</label><select><option>9:16</option><option>3:4</option><option>1:1</option><option>16:9</option></select></div></div><div class="gen-actions"><button id="copyGen" class="copy big">📋 Copy Prompt</button><button id="genBtn" class="generate big">✨ Generate Image</button></div><p id="genStatus" class="status"></p><img id="genResult" class="gen-result" alt="Generated preview"></div></div></div></section>
-<footer>PromptPixel • Free AI Photo Editing Prompts</footer><script src="script.js"></script></body></html>
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="PromptPixel — 100 free AI photo editing prompts with example images.">
+<title>PromptPixel — Free AI Photo Prompts</title>
+<link rel="stylesheet" href="style.css?v=3">
+</head>
+<body>
+<header class="topbar">
+  <a class="brand" href="#top"><span class="logo">P</span><span>Prompt<span class="accent">Pixel</span></span></a>
+  <div class="count">100 FREE PROMPTS</div>
+</header>
+<main id="top">
+<section class="hero">
+  <div class="pill">✨ 100% Free AI Prompts</div>
+  <h1>Create Better<br><span>AI Photos.</span></h1>
+  <p>Find the right prompt, see an example image, and copy the prompt for your AI photo editor.</p>
+  <a class="cta" href="#library">🔥 Explore Prompts</a>
+</section>
+<section id="library" class="library">
+  <div class="search-wrap"><input id="search" type="search" placeholder="Search prompts… e.g. cinematic, couple, rain" aria-label="Search prompts"></div>
+  <div id="categories" class="categories"></div>
+  <div class="ad" aria-label="Advertisement"><script>atOptions={'key':'a5da74f1cb6973c746743ba4869db5aa','format':'iframe','height':50,'width':320,'params':{}};</script><script src="https://www.highrevenueformat.com/a5da74f1cb6973c746743ba4869db5aa/invoke.js"></script></div>
+  <div class="results-head"><div><h2>Prompt Library</h2><p>Image + ready-to-use prompt</p></div><span id="resultCount"></span></div>
+  <div id="grid" class="grid"></div>
+</section>
+</main>
+<footer>PromptPixel • Free AI Photo Editing Prompts</footer>
+<script src="script.js?v=3"></script>
+</body>
+</html>
