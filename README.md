@@ -1,2 +1,1 @@
-# promptpixel
-Free AI Photo Editing Prompts
+PromptPixel V2 — 100 prompt cards with example images, copy buttons, Generate UI, search, categories, and Adsterra banner. GitHub Pages can host the static frontend; actual AI image generation requires connecting a secure image-generation API/backend.
