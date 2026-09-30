@@ -708,7 +708,19 @@ const count=document.getElementById('resultCount');
 let active='All';
 let visible=12;
 const categories=['All',...new Set(prompts.map(p=>p.category))];
-const imageMap={
+const beforeMap={
+  'Viral / Trending':'https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=900&q=85',
+  'Portrait & Face':'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=900&q=85',
+  'Couple & Romantic':'https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?auto=format&fit=crop&w=900&q=85',
+  'Fashion & Instagram':'https://images.unsplash.com/photo-1483985988355-763728e1935b?auto=format&fit=crop&w=900&q=85',
+  'Cinematic':'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=900&q=85',
+  'Mood / Sad / Rain':'https://images.unsplash.com/photo-1515694346937-94d85e41e6f0?auto=format&fit=crop&w=900&q=85',
+  'Luxury / Lifestyle':'https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=900&q=85',
+  'Travel & Background':'https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=900&q=85',
+  'Anime / Artistic':'https://images.unsplash.com/photo-1549490349-8643362247b5?auto=format&fit=crop&w=900&q=85',
+  'Professional / Profile':'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=900&q=85'
+};
+const afterMap={
   'Viral / Trending':'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=900&q=85',
   'Portrait & Face':'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=900&q=85',
   'Couple & Romantic':'https://images.unsplash.com/photo-1529333166437-7750a6dd5a70?auto=format&fit=crop&w=900&q=85',
@@ -716,12 +728,13 @@ const imageMap={
   'Cinematic':'https://images.unsplash.com/photo-1485846234645-a62644f84728?auto=format&fit=crop&w=900&q=85',
   'Mood / Sad / Rain':'https://images.unsplash.com/photo-1519692933481-e162a57d6721?auto=format&fit=crop&w=900&q=85',
   'Luxury / Lifestyle':'https://images.unsplash.com/photo-1497366811353-6870744d04b2?auto=format&fit=crop&w=900&q=85',
-  'Travel & Background':'https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=900&q=85',
+  'Travel & Background':'https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=900&q=85',
   'Anime / Artistic':'https://images.unsplash.com/photo-1578632767115-351597cf2477?auto=format&fit=crop&w=900&q=85',
   'Professional / Profile':'https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&w=900&q=85'
 };
 function tagsOf(p){return String(p.tags||'').split(',').map(x=>x.trim()).filter(Boolean)}
-function imgOf(p){return imageMap[p.category]||imageMap['Portrait & Face']}
+function beforeImg(p){return beforeMap[p.category]||beforeMap['Portrait & Face']}
+function afterImg(p){return afterMap[p.category]||afterMap['Portrait & Face']}
 function escapeHtml(s){return String(s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]))}
 function filtered(){const q=search.value.toLowerCase().trim();return prompts.filter(p=>(active==='All'||p.category===active)&&(!q||(p.title+' '+p.description+' '+p.prompt+' '+tagsOf(p).join(' ')).toLowerCase().includes(q)))}
 function render(){
@@ -730,7 +743,7 @@ function render(){
   const shown=list.slice(0,visible);
   if(!shown.length){grid.innerHTML='<div class="empty">No prompts found. Try another search.</div>';return;}
   grid.innerHTML=shown.map((p,i)=>`<article class="card">
-    <div class="card-image"><img src="${imgOf(p)}" alt="${escapeHtml(p.title)}" loading="lazy"><span>${escapeHtml(p.category)}</span></div>
+    <div class="compare"><div class="compare-side"><img src="${beforeImg(p)}" alt="Before example for ${escapeHtml(p.title)}" loading="lazy"><span class="before-label">BEFORE</span></div><div class="compare-side"><img src="${afterImg(p)}" alt="After example for ${escapeHtml(p.title)}" loading="lazy"><span class="after-label">AFTER</span></div><span class="category-badge">${escapeHtml(p.category)}</span></div>
     <div class="card-body">
       <h3>${escapeHtml(p.title)}</h3>
       <p class="desc">${escapeHtml(p.description)}</p>

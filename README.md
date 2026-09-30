@@ -1,5 +1,1 @@
-# PromptPixel V3
-
-Free AI photo editing prompt library. 100 prompt cards include an example image, ready-to-use prompt, categories, search, and Copy Prompt. The generator has been removed intentionally; PromptPixel only provides prompts.
-
-Hosted on GitHub Pages.
+PromptPixel V4 — 100 free AI photo-editing prompts. Every prompt card shows separate BEFORE and AFTER example images, the ready-to-use prompt, search, categories, copy button, and Adsterra banner. No image generator is included.
